@@ -24,6 +24,12 @@ namespace ValveResourceFormat.ResourceTypes
         public uint[] SurfacePropertyHashes
             => Data.GetArray<object>("m_surfacePropertyHashes").Select(Convert.ToUInt32).ToArray();
 
+        public uint[] BoneParents
+            => Data.GetArray<object>("m_boneParents").Select(Convert.ToUInt32).ToArray();
+
+        public string[] BoneNames
+            => Data.GetArray<string>("m_boneNames");
+
         public IReadOnlyList<KVObject> CollisionAttributes
             => Data.GetArray("m_collisionAttributes");
 

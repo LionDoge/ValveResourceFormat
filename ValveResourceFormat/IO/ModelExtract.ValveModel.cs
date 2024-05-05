@@ -633,12 +633,21 @@ partial class ModelExtract
 
         if (physAggregateData is not null)
         {
+            var i = 0;
+            var boneNames = physAggregateData.BoneNames;
+            var boneParents = physAggregateData.BoneParents;
             foreach (var physicsPart in physAggregateData.Parts)
             {
+                var parentBoneName = "";
+                if (i >= 0 && i < boneParents.Length)
+                {
+                    parentBoneName = boneNames[boneParents[i]];
+                }
                 foreach (var sphere in physicsPart.Shape.Spheres)
                 {
                     var physicsShapeSphere = MakeNode(
                         "PhysicsShapeSphere",
+                        ("parent_bone", parentBoneName),
                         ("surface_prop", PhysicsSurfaceNames[sphere.SurfacePropertyIndex]),
                         ("collision_tags", string.Join(" ", PhysicsCollisionTags[sphere.CollisionAttributeIndex])),
                         ("radius", sphere.Shape.Radius),
@@ -652,6 +661,7 @@ partial class ModelExtract
                 {
                     var physicsShapeCapsule = MakeNode(
                         "PhysicsShapeCapsule",
+                        ("parent_bone", parentBoneName),
                         ("surface_prop", PhysicsSurfaceNames[capsule.SurfacePropertyIndex]),
                         ("collision_tags", string.Join(" ", PhysicsCollisionTags[capsule.CollisionAttributeIndex])),
                         ("radius", capsule.Shape.Radius),
@@ -661,6 +671,7 @@ partial class ModelExtract
 
                     AddItem(physicsShapeList.Value, physicsShapeCapsule);
                 }
+                i++;
             }
         }
 
